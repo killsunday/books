@@ -35,6 +35,32 @@ export default async function BooksPage() {
           email: true,
         },
       },
+      assignees: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      milestones: {
+        include: {
+          tasks: true,
+        },
+        orderBy: {
+          startDate: 'asc',
+        },
+      },
+      characters: true,
+      writingSessions: {
+        include: {
+          milestone: {
+            select: {
+              id: true,
+              title: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',

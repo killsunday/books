@@ -3,10 +3,9 @@ import { prisma } from '@/lib/prisma'
 type BookWithUser = {
   id: number
   title: string
-  author: string
   description: string | null
-  isbn: string | null
-  publishedAt: Date | null
+  completedAt: Date | null
+  expectedWordCount: number | null
   createdAt: Date
   updatedAt: Date
   userId: number
@@ -18,7 +17,15 @@ type BookWithUser = {
 
 export default async function Home() {
   const books = await prisma.book.findMany({
-    include: {
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      completedAt: true,
+      expectedWordCount: true,
+      createdAt: true,
+      updatedAt: true,
+      userId: true,
       user: {
         select: {
           name: true,
@@ -35,12 +42,8 @@ export default async function Home() {
         {books.map((book) => (
           <div key={book.id} className="border rounded-lg p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-2">{book.title}</h2>
-            <p className="text-gray-600 mb-2">By {book.author}</p>
             {book.description && (
               <p className="text-gray-700 mb-4">{book.description}</p>
-            )}
-            {book.isbn && (
-              <p className="text-sm text-gray-500">ISBN: {book.isbn}</p>
             )}
             <p className="text-sm text-gray-500 mt-4">
               Added by: {book.user.name || book.user.email}

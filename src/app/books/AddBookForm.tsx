@@ -63,7 +63,7 @@ export default function AddBookForm({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="title" className="block text-sm font-medium text-gray-900">
                 Title *
               </label>
               <input
@@ -71,24 +71,24 @@ export default function AddBookForm({ onClose }: { onClose: () => void }) {
                 id="title"
                 name="title"
                 required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900"
               />
             </div>
 
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-900">
                 Description
               </label>
               <textarea
                 id="description"
                 name="description"
                 rows={3}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900"
               />
             </div>
 
             <div>
-              <label htmlFor="expectedWordCount" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="expectedWordCount" className="block text-sm font-medium text-gray-900">
                 Expected Word Count
               </label>
               <input
@@ -96,25 +96,25 @@ export default function AddBookForm({ onClose }: { onClose: () => void }) {
                 id="expectedWordCount"
                 name="expectedWordCount"
                 min="0"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900"
               />
             </div>
 
             <div>
-              <label htmlFor="completedAt" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="completedAt" className="block text-sm font-medium text-gray-900">
                 Target Completion Date
               </label>
               <input
                 type="date"
                 id="completedAt"
                 name="completedAt"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Assign Users
+              <label className="block text-sm font-medium text-gray-900">
+                Assign Users (Optional)
               </label>
               <div className="mt-1 flex space-x-2">
                 <input
@@ -122,7 +122,7 @@ export default function AddBookForm({ onClose }: { onClose: () => void }) {
                   value={assigneeEmail}
                   onChange={(e) => setAssigneeEmail(e.target.value)}
                   placeholder="Enter email"
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900"
                 />
                 <button
                   type="button"
@@ -136,7 +136,7 @@ export default function AddBookForm({ onClose }: { onClose: () => void }) {
                 <div className="mt-2 space-y-2">
                   {assignees.map((email) => (
                     <div key={email} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md">
-                      <span className="text-sm text-gray-700">{email}</span>
+                      <span className="text-sm text-gray-900">{email}</span>
                       <button
                         type="button"
                         onClick={() => removeAssignee(email)}
@@ -148,6 +148,9 @@ export default function AddBookForm({ onClose }: { onClose: () => void }) {
                   ))}
                 </div>
               )}
+              <p className="mt-1 text-sm text-gray-500">
+                You can optionally assign other users to this book. If no users are assigned, only you will have access.
+              </p>
             </div>
           </div>
 
@@ -161,7 +164,7 @@ export default function AddBookForm({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
             >
               Cancel
             </button>

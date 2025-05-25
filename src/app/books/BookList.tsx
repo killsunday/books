@@ -1,6 +1,7 @@
 'use client'
 
 import { Book } from '@/types/book'
+import Link from 'next/link'
 
 interface BookListProps {
   books: Book[]
@@ -41,7 +42,9 @@ export default function BookList({ books }: BookListProps) {
           {books.map((book) => (
             <tr key={book.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm font-medium text-gray-900">{book.title}</div>
+                <Link href={`/books/${book.id}`} className="text-indigo-600 hover:text-indigo-900">
+                  <div className="text-sm font-medium">{book.title}</div>
+                </Link>
                 {book.description && (
                   <div className="text-sm text-gray-500 truncate max-w-xs">
                     {book.description}

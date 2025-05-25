@@ -13,15 +13,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Account {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  subscriptionStartDate DateTime?
+  subscriptionEndDate DateTime?
+  ownerId             Int      @unique
+  owner               User     @relation("AccountOwner", fields: [ownerId], references: [id])
+  members             User[]   @relation("AccountMembers")
+  books               Book[]
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  email     String   @unique
-  password  String
-  books     Book[]   @relation("BookOwner")
-  assignedBooks Book[] @relation("BookAssignee")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                Int       @id @default(autoincrement())
+  name              String?
+  email             String    @unique
+  password          String
+  emailVerified     Boolean   @default(false)
+  verificationToken String?   @unique
+  tokenExpiresAt    DateTime?
+  books             Book[]    @relation("BookOwner")
+  assignedBooks     Book[]    @relation("BookAssignee")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  ownedAccount      Account?  @relation("AccountOwner")
+  memberOfAccount   Account?  @relation("AccountMembers", fields: [accountId], references: [id])
+  accountId         Int?
+
+  @@index([accountId])
 }
 
 model Book {
@@ -35,6 +56,87 @@ model Book {
   userId          Int
   user            User     @relation("BookOwner", fields: [userId], references: [id])
   assignees       User[]   @relation("BookAssignee")
+  milestones      Milestone[]
+  characters      Character[]
+  writingSessions WritingSession[]
+  accountId       Int
+  account         Account  @relation(fields: [accountId], references: [id])
 
   @@index([userId])
+  @@index([accountId])
+}
+
+model Milestone {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String?
+  startDate       DateTime
+  endDate         DateTime
+  expectedWordCount Int?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  bookId          Int
+  book            Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  tasks           Task[]
+  writingSessions WritingSession[]
+
+  @@index([bookId])
+}
+
+model Task {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String?
+  dueDate         DateTime
+  completedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  milestoneId     Int
+  milestone       Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+
+  @@index([milestoneId])
+}
+
+model Character {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookId      Int
+  book        Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  images      CharacterImage[]
+
+  @@index([bookId])
+}
+
+model CharacterImage {
+  id          Int      @id @default(autoincrement())
+  url         String
+  caption     String?
+  isPrimary   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  characterId Int
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@index([characterId])
+}
+
+model WritingSession {
+  id          Int      @id @default(autoincrement())
+  wordCount   Int
+  minutes     Int
+  date        DateTime @default(now())
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookId      Int
+  book        Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  milestoneId Int?
+  milestone   Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+
+  @@index([bookId])
+  @@index([milestoneId])
 }
